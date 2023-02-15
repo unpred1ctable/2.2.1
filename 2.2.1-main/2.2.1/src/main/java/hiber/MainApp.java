@@ -3,6 +3,7 @@ package hiber;
 import hiber.config.AppConfig;
 import hiber.model.Car;
 import hiber.model.User;
+import hiber.service.CarService;
 import hiber.service.UserService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -16,17 +17,19 @@ public class MainApp {
 
       UserService userService = context.getBean(UserService.class);
 
-      userService.add(new Car("BMW-I8", 12345));
-      userService.add(new Car("Mercedes e-class", 12345));
-      userService.add(new Car("Mercedes s-class", 16665));
-      userService.add(new Car("Mercedes Maybach", 77777));
+      CarService carService = context.getBean(CarService.class);
 
-      List<Car> cars = userService.listCars();
+      carService.addCar(new Car("BMW-I8", 12345));
+      carService.addCar(new Car("Mercedes e-class", 12345));
+      carService.addCar(new Car("Mercedes s-class", 16665));
+      carService.addCar(new Car("Mercedes Maybach", 77777));
 
-      userService.add(new User("User1", "Lastname1", "user1@mail.ru", cars.get(0)));
-      userService.add(new User("User2", "Lastname2", "user2@mail.ru", cars.get(1)));
-      userService.add(new User("User3", "Lastname3", "user3@mail.ru", cars.get(2)));
-      userService.add(new User("User4", "Lastname4", "user4@mail.ru", cars.get(3)));
+      List<Car> cars = carService.listCars();
+
+      userService.addUser(new User("User1", "Lastname1", "user1@mail.ru", cars.get(0)));
+      userService.addUser(new User("User2", "Lastname2", "user2@mail.ru", cars.get(1)));
+      userService.addUser(new User("User3", "Lastname3", "user3@mail.ru", cars.get(2)));
+      userService.addUser(new User("User4", "Lastname4", "user4@mail.ru", cars.get(3)));
 
       List<User> users = userService.listUsers();
       for (User user : users) {
@@ -36,7 +39,7 @@ public class MainApp {
          System.out.println("Email = " + user.getEmail());
          System.out.println("car = " + user.getCar().getModel());
       }
-      User findedUser = userService.findUser("Mercedes e-class", 12345);
+      User findedUser = userService.getUserCar("Mercedes e-class", 12345);
       System.out.println(findedUser.getFirstName());
       context.close();
    }
